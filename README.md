@@ -3,11 +3,11 @@ Pomodoro Timer
 
 1. Introduction
 -----------------
-A simple Python time management tool, using [The Pomodoro Technique](www.pomodorotechnique.com).
+A simple Python time management tool, using [The Pomodoro Technique](http://www.pomodorotechnique.com).
 
 2. Pre-Requirement
 --------------------
-You need [Python2.7](www.python.org) and [wxpython 2.9.5.0](www.wxpython.org).
+You need [Python2.7](http://www.python.org) and [wxpython 2.9.5.0](http://www.wxpython.org).
 
 Tested only in windows7
 
