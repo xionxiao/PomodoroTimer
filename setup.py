@@ -40,11 +40,13 @@ changelog and logo are included in dist
 setup(
     windows = [
         {
-            "script": "Timer.pyw",
+            "script": "App.pyw",
             "icon_resources": [(1, "favicon.ico")],
-            "other_resources": [(24,1,manifest)]
+            #"other_resources": [(24,1,manifest)]
         }
     ],
-    data_files=["favicon.ico", "REMINDER.WAV"],
-    options = {"py2exe": {"dll_excludes":["MSVCP90.dll","MSVCR90.dll"]}}
+    data_files=["favicon.ico", "REMINDER.WAV",
+                "HmJobsDone.wav", "HmReadyToWork.wav",
+                "LICENSE","CHANGELOG"],
+    options = {"py2exe": {"dll_excludes":["MSVCP90.dll"]}}
 )
