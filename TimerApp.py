@@ -2,6 +2,7 @@
 from MainFrm import *
 from TaskbarIcon import *
 import wx
+import sqlite3
 
 class TimerApp(wx.App):
     # Work for every 25 min
@@ -11,8 +12,14 @@ class TimerApp(wx.App):
     # 任务开始时间
     __start_time = None
 
-    def __init__(self):
-        wx.App.__init__(self, False)
+    # override
+    def OnInit(self):
+        # Prevent multiple instance of the program
+        self.name = "PomodoroTimer-%s" % wx.GetUserId()
+        self.instance = wx.SingleInstanceChecker(self.name)
+        if self.instance.IsAnotherRunning():
+            wx.MessageBox(u"已有一个程序实例在运行。", "ERROR")
+            return False
         # Init main frame
         self.__frame = MainFrame()
         self.SetTopWindow(self.__frame)
@@ -23,10 +30,35 @@ class TimerApp(wx.App):
         # Init timer
         self.__timer = wx.Timer()
         self.Bind(wx.EVT_TIMER, self.__OnTimer, self.__timer)
+        # Create database
+        self.__conn = sqlite3.connect('timer.db')
+        c = self.__conn.cursor()
+        c.execute('''create table if not exists timer
+                  (date text, start_time text,
+                  end_time text, status text)''')
+        c.execute('''select count(date) from timer
+                   where date = "%s"''' % wx.DateTime.Now().FormatISODate())
+        count = c.fetchone()[0]
+        self.__frame.SetCount(count)
+        self.__conn.commit()
+        c.close()
+        return True
 
+    # override
+    def OnExit(self):
+        self.__conn.close()
+        
     def __OnTimer(self, evt):
-        # self.__timespan.Subtract(wx.TimeSpan.Second())
+        end_time = wx.DateTime.Now()
         self.StopTask(evt)
+        c = self.__conn.cursor()
+        t = (self.__start_time.FormatISODate(),
+             self.__start_time.FormatISOTime(),
+             end_time.FormatISOTime())
+        print t
+        c.execute("insert into timer values(?,?,?,'done')", t)
+        self.__conn.commit()
+        c.close()
     
     def StartTask(self, evt):
         self.__timer.Start(self.__work_time.GetMilliseconds(), True)
@@ -57,3 +89,4 @@ class TimerApp(wx.App):
             soundFile = name
         sound = wx.Sound(soundFile)
         sound.Play(wx.SOUND_ASYNC)
+

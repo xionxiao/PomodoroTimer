@@ -1,15 +1,25 @@
 ﻿import wx
 
 class _CounterBar(wx.Window):
+    __count = 0
     def __init__(self, parent):
         wx.Window.__init__(self, parent, size=wx.Size(8,8))
         self.__sizer = wx.BoxSizer(wx.HORIZONTAL)
         self.SetSizer(self.__sizer)
-        
-    def Increase(self):
+
+    def __AddBlock(self):
         block = wx.Window(self, wx.ID_ANY, size=(8,6))
         block.SetBackgroundColour(wx.BLUE)
         self.__sizer.Add(block, 1, wx.ALIGN_CENTER_VERTICAL|wx.EXPAND|wx.ALL, 1)
+        
+    def SetCount(self, count):
+        self.__sizer.Clear()
+        for i in range(0, count):
+            self.__AddBlock()
+        self.SetSizerAndFit(self.__sizer)
+            
+    def Increase(self):
+        self.__AddBlock()
         self.SetSizerAndFit(self.__sizer)
 
 class MainFrame(wx.Frame):
@@ -59,6 +69,9 @@ class MainFrame(wx.Frame):
         # Prevent Exit Event
         evt.Veto()
 
+    def SetCount(self, count):
+        self.__counter_bar.SetCount(count)
+        
     def OnStartTask(self, evt):
         time = wx.GetApp().GetTimeLeft()
         self.__timer = wx.Timer(self)
