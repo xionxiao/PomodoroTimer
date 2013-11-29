@@ -38,12 +38,15 @@ class MainFrame(wx.Frame):
         self.text_box = wx.StaticText(p, -1, "25:00")
         self.text_box.SetFont(font)
         self.text_box.SetForegroundColour(wx.RED)
-        
-        self.btn_start = wx.Button(p, -1,  "Start", size=(84,32))
+
+        font.SetPixelSize(wx.Size(10,20))
+        self.btn_start = wx.Button(p, -1,  u"开始", size=(84,32))
+        self.btn_start.SetFont(font)
         self.Bind(wx.EVT_BUTTON, wx.GetApp().StartTask, self.btn_start)
         self.btn_start.Enable(True)
         
-        self.btn_stop = wx.Button(p, -1, "Stop", size=(84,32))
+        self.btn_stop = wx.Button(p, -1, u"停止", size=(84,32))
+        self.btn_stop.SetFont(font)
         self.Bind(wx.EVT_BUTTON, wx.GetApp().StopTask, self.btn_stop)
         self.btn_stop.Enable(False)
         
