@@ -1,6 +1,6 @@
 @echo off 
 
-python setup.py py2exe
+python setup.py "amd64" py2exe 
 
 cd dist
 
