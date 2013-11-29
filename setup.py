@@ -6,7 +6,7 @@ import py2exe
 import sys
 
 # Change to x86 or amd64 according to your processor Architecture
-if sys.argv[1] and (sys.argv[1] in ("amd64", "x86", "AMD64", "X86"):
+if sys.argv[1] and (sys.argv[1] in ("amd64", "x86", "AMD64", "X86")):
     platform = sys.argv[1]
     sys.argv.pop(1)
 else:
