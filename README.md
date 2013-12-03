@@ -15,8 +15,10 @@ Tested only in windows7
 --------------------
 No need to install, just run App.pyw.
 
-Packing to exe file you need [py2exe](http://www.py2exe.org), [7z](http://www.7-zip.org) and [upx](http://upx.sourceforge.net) installed.
+Packing to exe file you need [py2exe](http://www.py2exe.org), <s>[7z](http://www.7-zip.org) and [upx](http://upx.sourceforge.net)</s> installed.
 
-Modify Pack.bat and run will generate a executable file in dist dir. 
+Run setup.py will generate a executable file in dist dir. 
+
+Suggest pack in windows x86.
 
 Setup script is not ready yet.
