@@ -6,7 +6,7 @@ import sqlite3
 
 class TimerApp(wx.App):
     # Work for every 25 min
-    __work_time = wx.TimeSpan(0,25)
+    __work_time = wx.TimeSpan(0,1)
     # Rest for 5 min, not used by now
     __rest_time = wx.TimeSpan(0,5)
     # 任务开始时间
@@ -51,11 +51,15 @@ class TimerApp(wx.App):
     def __OnTimer(self, evt):
         end_time = wx.DateTime.Now()
         self.StopTask(evt)
+        if self.__frame.IsIconized():
+            self.__frame.Iconize(False)
+        if not self.__frame.IsShown():
+            self.__frame.Show()
+        self.__frame.Raise()
         c = self.__conn.cursor()
         t = (self.__start_time.FormatISODate(),
              self.__start_time.FormatISOTime(),
              end_time.FormatISOTime())
-        print t
         c.execute("insert into timer values(?,?,?,'done')", t)
         self.__conn.commit()
         c.close()
