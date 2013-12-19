@@ -6,7 +6,7 @@ import sqlite3
 
 class TimerApp(wx.App):
     # Work for every 25 min
-    __work_time = wx.TimeSpan(0,1)
+    __work_time = wx.TimeSpan(0,25)
     # Rest for 5 min, not used by now
     __rest_time = wx.TimeSpan(0,5)
     # 任务开始时间
