@@ -1,15 +1,14 @@
 ﻿import wx
 
 class _CounterBar(wx.Window):
-    __count = 0
     def __init__(self, parent):
         wx.Window.__init__(self, parent, size=wx.Size(8,8))
         self.__sizer = wx.BoxSizer(wx.HORIZONTAL)
         self.SetSizer(self.__sizer)
 
-    def __AddBlock(self):
+    def __AddBlock(self, color=wx.BLUE):
         block = wx.Window(self, wx.ID_ANY, size=(8,6))
-        block.SetBackgroundColour(wx.BLUE)
+        block.SetBackgroundColour(color or wx.BLUE)
         self.__sizer.Add(block, 1, wx.ALIGN_CENTER_VERTICAL|wx.EXPAND|wx.ALL, 1)
         
     def SetCount(self, count):
@@ -18,8 +17,8 @@ class _CounterBar(wx.Window):
             self.__AddBlock()
         self.SetSizerAndFit(self.__sizer)
             
-    def Increase(self):
-        self.__AddBlock()
+    def Increase(self, color=wx.BLUE):
+        self.__AddBlock(color)
         self.SetSizerAndFit(self.__sizer)
 
 class MainFrame(wx.Frame):
@@ -88,6 +87,9 @@ class MainFrame(wx.Frame):
         time = wx.GetApp().GetTimeLeft()
         self.__timer.Stop()
         if time.IsPositive():
+            # more than 1 minite mark as cancel and set conter_bar block red
+            if (time < wx.TimeSpan(0,1)):
+                self.__counter_bar.Increase(wx.RED)
             self.text_box.SetLabel(time.Format("%M:%S"))
         else:
             self.__counter_bar.Increase()
