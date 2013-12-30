@@ -3,6 +3,7 @@ from MainFrm import *
 from TaskbarIcon import *
 import wx
 import sqlite3
+from R import *
 
 class TimerApp(wx.App):
     # Work for every 25 min
@@ -91,6 +92,7 @@ class TimerApp(wx.App):
             soundFile = 'REMINDER.WAV'
         else:
             soundFile = name
-        sound = wx.Sound(soundFile)
+        sound = wx.Sound()
+        sound.CreateFromData(R[soundFile].read())
         sound.Play(wx.SOUND_ASYNC)
 

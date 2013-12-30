@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
 import wx
+from R import *
 
 class TaskBarIcon(wx.TaskBarIcon):
     def __init__(self, frame=None):
         wx.TaskBarIcon.__init__(self)
-        icon = wx.Icon('favicon.ico', wx.BITMAP_TYPE_ICO)
+        #icon = wx.Icon('favicon.ico', wx.BITMAP_TYPE_ICO)
+        icon = wx.EmptyIcon()
+        bmp = wx.BitmapFromImage(wx.ImageFromStream(R['favicon.ico'], type=wx.BITMAP_TYPE_ICO))
+        icon.CopyFromBitmap(bmp)
         self.__frame = frame
         self.SetIcon(icon, u"番茄时钟")
         self.__menu = self.CreatePopupMenu()

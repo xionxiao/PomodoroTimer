@@ -4,6 +4,16 @@
 from distutils.core import setup
 import py2exe
 import sys, platform
+from Resource import Resource
+
+# generate R.py from resources
+print "creating R.py"
+res = Resource()
+res.Add('favicon.ico', 'favicon.ico')
+res.Add('HmJobsDone.wav', 'HmJobsDone.wav')
+res.Add('REMINDER.WAV', 'REMINDER.WAV')
+res.Add('HmReadyToWork.wav', 'HmReadyToWork.wav')
+res.Compile()
 
 # Change to x86 or amd64 according to your processor Architecture
 if len(sys.argv) > 1 and (sys.argv[1] in ("amd64", "x86", "AMD64", "X86")):
@@ -85,8 +95,8 @@ setup(
             "other_resources": [(24,1,manifest)]
         }
     ],
-    data_files=["favicon.ico", "REMINDER.WAV",
-                "HmJobsDone.wav", "HmReadyToWork.wav",
-                "LICENSE","CHANGELOG"],
+    data_files=[#"favicon.ico", "REMINDER.WAV",
+                #"HmJobsDone.wav", "HmReadyToWork.wav",
+                ("", ["LICENSE","CHANGELOG.md"])],
     options = {"py2exe": py2exe_options}
 )

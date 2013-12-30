@@ -1,4 +1,5 @@
 ﻿import wx
+from R import *
 
 class _CounterBar(wx.Window):
     def __init__(self, parent):
@@ -26,7 +27,9 @@ class MainFrame(wx.Frame):
         wx.Frame.__init__(self, None, title=u'番茄时钟 —— by xhui', size=(330,100),
                           style=(wx.DEFAULT_FRAME_STYLE | wx.STAY_ON_TOP) & #Raise User Action
                           ~(wx.RESIZE_BORDER | wx.MAXIMIZE_BOX))
-        icon = wx.Icon('favicon.ico', wx.BITMAP_TYPE_ICO)
+        bmp = wx.BitmapFromImage(wx.ImageFromStream(R['favicon.ico'], type=wx.BITMAP_TYPE_ICO))
+        icon = wx.EmptyIcon()
+        icon.CopyFromBitmap(bmp)
         self.SetIcon(icon)
         self.Bind(wx.EVT_CLOSE, self.OnClose)
         self.Bind(wx.EVT_ICONIZE, self.OnIconify)
