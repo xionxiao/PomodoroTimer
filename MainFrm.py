@@ -91,7 +91,7 @@ class MainFrame(wx.Frame):
         self.__timer.Stop()
         if time.IsPositive():
             # more than 1 minite mark as cancel and set conter_bar block red
-            if (time < wx.TimeSpan(0,1)):
+            if (time < wx.TimeSpan(0,24)):
                 self.__counter_bar.Increase(wx.RED)
             self.text_box.SetLabel(time.Format("%M:%S"))
         else:
