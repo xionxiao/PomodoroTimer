@@ -24,12 +24,12 @@ class TimerApp(wx.App, OnStateChangeListener):
          
     # override
     def OnInit(self):
-        # Prevent multiple instance of the program
-        # self.name = "PomodoroTimer-%s" % wx.GetUserId()
-        # self.instance = wx.SingleInstanceChecker(self.name)
-        # if self.instance.IsAnotherRunning():
-        #     wx.MessageBox(u"已有一个程序实例在运行。", "ERROR")
-        #     return False
+        Prevent multiple instance of the program
+        self.name = "PomodoroTimer-%s" % wx.GetUserId()
+        self.instance = wx.SingleInstanceChecker(self.name)
+        if self.instance.IsAnotherRunning():
+            wx.MessageBox(u"已有一个程序实例在运行。", "ERROR")
+            return False
 
         # Init State Object, State is Singleton, so call State() will get same object
         self.__state = State()
