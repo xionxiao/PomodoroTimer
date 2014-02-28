@@ -1,4 +1,6 @@
-﻿import wx
+﻿# -*- coding: utf-8 -*-
+import wx
+import logging
 from State import *
 from R import *
 
@@ -41,6 +43,7 @@ class MainFrame(wx.Frame, OnStateChangeListener):
         self.Bind(wx.EVT_CLOSE, self.OnClose)
         self.Bind(wx.EVT_ICONIZE, self.OnIconify)
 
+        # timer for counting every second
         self.__timer = wx.Timer(self)
         self.Bind(wx.EVT_TIMER, self.__OnTimer, self.__timer)
 
@@ -49,7 +52,7 @@ class MainFrame(wx.Frame, OnStateChangeListener):
         font.SetPixelSize(wx.Size(18,32))
         self.text_box = wx.StaticText(p, -1, wx.GetApp().GetTimeLeft().Format("%M:%S"))
         self.text_box.SetFont(font)
-        self.text_box.SetForegroundColour(wx.RED)
+        self.text_box.SetForegroundColour(wx.ColourDatabase().Find("DIM GREY"))
 
         font.SetPixelSize(wx.Size(10,20))
         self.btn_start = wx.Button(p, -1,  u"开始", size=(84,32))
@@ -94,6 +97,8 @@ class MainFrame(wx.Frame, OnStateChangeListener):
         time = wx.GetApp().GetTimeLeft()
         self.__timer.Start(1000)
         self.text_box.SetLabel(time.Format("%M:%S"))
+        if self.__state.getState() in ('StopState','IdleState'):
+            self.text_box.SetForegroundColour(wx.RED)
         self.btn_start.Enable(False)
         self.btn_stop.Enable(True)
         self.btn_stop.SetLabel(u"中断")
@@ -105,12 +110,15 @@ class MainFrame(wx.Frame, OnStateChangeListener):
         self.btn_start.SetLabel(u"开始")
         self.btn_start.Enable(True)
         self.btn_stop.SetLabel(u"结束")
-        self.text_box.SetForegroundColour(wx.RED)
         if state_name in ('StopState', 'IdleState'):
+            self.text_box.SetForegroundColour(wx.ColourDatabase().Find("DIM GREY"))
             self.btn_stop.Enable(False)
         elif  state_name is 'WorkState':
+            time = wx.GetApp().GetTimeLeft()
             self.btn_stop.Enable(True)
         elif state_name is 'RestState':
+            self.text_box.SetForegroundColour(wx.RED)
+            time = wx.GetApp().GetWorkTimeSpan()
             self.btn_stop.Enable(True)
         self.text_box.SetLabel(time.Format("%M:%S"))
 

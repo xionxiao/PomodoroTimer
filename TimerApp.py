@@ -3,6 +3,7 @@ from MainFrm import *
 from TaskbarIcon import *
 import wx
 import sqlite3
+import logging
 from R import *
 from State import *
 
@@ -24,7 +25,7 @@ class TimerApp(wx.App, OnStateChangeListener):
          
     # override
     def OnInit(self):
-        Prevent multiple instance of the program
+        # Prevent multiple instance of the program
         self.name = "PomodoroTimer-%s" % wx.GetUserId()
         self.instance = wx.SingleInstanceChecker(self.name)
         if self.instance.IsAnotherRunning():
@@ -98,7 +99,7 @@ class TimerApp(wx.App, OnStateChangeListener):
         elif state_name is 'RestState':
             self.__PlaySound('REMINDER.WAV')
         elif state_name is 'IdleState':
-            self.__PlaySound('REMINDER.WAV')
+            self.__PlaySound('notimeforplay.wav')
         # For RestState, if timeup, RestState will change to IdleState
         self.__timer.Start(self.__idle_time_notify.GetMilliseconds(), True)
 
@@ -113,12 +114,14 @@ class TimerApp(wx.App, OnStateChangeListener):
     # Get left time
     # Return type: wx.TimeSpan
     def GetTimeLeft(self):
-        timeleft = wx.TimeSpan(0,0)
+        timeleft = wx.TimeSpan(0)
         state_name = self.__state.getState()
         if state_name is 'WorkState':
             timeleft = self.__work_time - (wx.DateTime.Now()-self.__start_time)
         elif state_name is 'RestState':
             timeleft = self.__rest_time - (wx.DateTime.Now()-self.__start_time)
+            if timeleft.IsNegative():
+                timeleft = wx.TimeSpan(0)
         elif state_name is 'IdleState':
             timeleft = self.__work_time - (wx.DateTime.Now()-self.__start_time)
         elif state_name is 'StopState':

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from Singleton import *
+import logging
 
 class OnStateChangeListener:
     __state = {'WorkState', 'IdleState', 'RestState', 'StopState'}
@@ -98,7 +99,7 @@ class RestState(_State):
         _State._currentState = IdleState()
 
     def Stop(self):
-        _State._currentState = StopState()
+        _State._currentState = IdleState()
 
 class StopState(_State):
     def Start(self):
@@ -119,16 +120,25 @@ class State(_State):
         return self._currentState.__class__.__name__
 
     def Start(self):
+        str = '[' + self.getState() + "] --start--> ["
         _State._currentState.Update('start')
         _State._currentState.Start()
+        str += self.getState() + ']'
+        logging.info(str)
 
     def Stop(self):
+        str = '[' + self.getState() + "] --stop--> ["
         _State._currentState.Update('stop')
         _State._currentState.Stop()
+        str += self.getState() + ']'
+        logging.info(str)
 
     def TimeUp(self):
+        str = '[' + self.getState() + "] --timeup--> ["
         _State._currentState.Update('timeup')
         _State._currentState.TimeUp()
+        str += self.getState() + ']'
+        logging.info(str)
 
     def AddListener(self, l, state=None):
         if not state:
@@ -138,4 +148,3 @@ class State(_State):
             StopState().AddListener(l)
         elif issubclass(state.__class__, _State):
             state.AddListener(l)
-

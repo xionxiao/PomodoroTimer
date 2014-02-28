@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import wx
+import logging
 from State import *
 from R import *
 
@@ -26,7 +27,6 @@ class TaskBarIcon(wx.TaskBarIcon, OnStateChangeListener):
 
     # override function
     def CreatePopupMenu(self):
-        print "1111"
         menu = wx.Menu()
         item = menu.Append(wx.ID_ANY, u"打开")
         self.Bind(wx.EVT_MENU, self.__OnTaskBarLeftDClick, item)

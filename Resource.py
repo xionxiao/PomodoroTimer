@@ -1,3 +1,4 @@
+# -*- coding: utf8 -*-
 import os, base64, zlib
 import StringIO
 
@@ -21,6 +22,7 @@ class Resource():
 
     def Compile(self):
         rf = open('R.py', 'w+')
+        rf.write("# -*- coding: utf8 -*-\n")
         rf.write('import base64, zlib, StringIO\n')
         rf.write(_R_Class_String)
         for r in self.__res_list:
