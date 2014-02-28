@@ -13,6 +13,7 @@ res.Add('favicon.ico', 'favicon.ico')
 res.Add('HmJobsDone.wav', 'HmJobsDone.wav')
 res.Add('REMINDER.WAV', 'REMINDER.WAV')
 res.Add('HmReadyToWork.wav', 'HmReadyToWork.wav')
+res.Add('notimeforplay.wav', 'notimeforplay.wav')
 res.Compile()
 
 # Change to x86 or amd64 according to your processor Architecture
