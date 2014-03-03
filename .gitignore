@@ -39,3 +39,6 @@ nosetests.xml
 
 # Generate resource file
 R.py
+
+# Log file
+log.txt

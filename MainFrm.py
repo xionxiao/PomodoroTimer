@@ -142,7 +142,6 @@ class MainFrame(wx.Frame, OnStateChangeListener):
         self.btn_start.Enable(True)
         self.btn_stop.Enable(True)
         
-
     def __OnRestStateTimeUp(self):
         time = wx.GetApp().GetWorkTimeSpan()
         self.text_box.SetLabel(time.Format("%M:%S"))
@@ -152,14 +151,14 @@ class MainFrame(wx.Frame, OnStateChangeListener):
         self.btn_stop.Enable(True)
 
     def __OnIdleStateTimeUp(self):
-        time = wx.GetApp().GetWorkTimeSpan()
-        self.text_box.SetLabel(time.Format("%M:%S"))
-        self.text_box.SetForegroundColour(wx.RED)
-        self.btn_start.SetLabel(u"开始")
-        self.btn_start.Enable(True)
-        self.btn_stop.Enable(True)
+        #time = wx.GetApp().GetWorkTimeSpan()
+        #self.text_box.SetLabel(time.Format("%M:%S"))
+        #self.text_box.SetForegroundColour(wx.RED)
+        #self.btn_start.SetLabel(u"开始")
+        #self.btn_start.Enable(True)
+        #self.btn_stop.Enable(True)
+        pass
         
-
     def SetCount(self, count):
         self.__counter_bar.SetCount(count)
 
