@@ -46,13 +46,13 @@ class OnStateChangeListener:
 
     def _PrintCallBacks(self, state, action):
         if hasattr(self.__lt[state][action], '__call__'): 
-            print state + ' ' + action + ' ' + self.__lt[state][action].func_name
+            print(state + ' ' + action + ' ' + self.__lt[state][action].func_name)
 
     def _PrintCallBacks(self):
         for state in self.__state:
             for action in self.__action:
                 if hasattr(self.__lt[state][action], '__call__'): 
-                    print state + ' ' + action + ' ' + self.__lt[state][action].func_name
+                    print(state + ' ' + action + ' ' + self.__lt[state][action].func_name)
 
 class _State(Singleton):
     _currentState = None
