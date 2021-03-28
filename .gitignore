@@ -21,6 +21,9 @@ lib
 lib64
 __pycache__
 
+# vscode
+.vscode
+
 # Installer logs
 pip-log.txt
 
@@ -42,3 +45,4 @@ R.py
 
 # Log file
 log.txt
+
