@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from Singleton import *
+from Singleton import Singleton
 import logging
 
 class OnStateChangeListener:
@@ -120,25 +120,25 @@ class State(_State):
         return self._currentState.__class__.__name__
 
     def Start(self):
-        str = '[' + self.getState() + "] --start--> ["
+        ss = '[' + self.getState() + "] --start--> ["
         _State._currentState.Update('start')
         _State._currentState.Start()
-        str += self.getState() + ']'
-        logging.info(str)
+        ss += self.getState() + ']'
+        logging.info(ss)
 
     def Stop(self):
-        str = '[' + self.getState() + "] --stop--> ["
+        ss = '[' + self.getState() + "] --stop--> ["
         _State._currentState.Update('stop')
         _State._currentState.Stop()
-        str += self.getState() + ']'
-        logging.info(str)
+        ss += self.getState() + ']'
+        logging.info(ss)
 
     def TimeUp(self):
-        str = '[' + self.getState() + "] --timeup--> ["
+        ss = '[' + self.getState() + "] --timeup--> ["
         _State._currentState.Update('timeup')
         _State._currentState.TimeUp()
-        str += self.getState() + ']'
-        logging.info(str)
+        ss += self.getState() + ']'
+        logging.info(ss)
 
     def AddListener(self, l, state=None):
         if not state:

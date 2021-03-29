@@ -36,11 +36,11 @@ class MainFrame(wx.Frame, OnStateChangeListener):
                           style=(wx.DEFAULT_FRAME_STYLE | wx.STAY_ON_TOP) & #Raise User Action
                           ~(wx.RESIZE_BORDER | wx.MAXIMIZE_BOX))
 
-        bmp = wx.BitmapFromImage(wx.ImageFromStream(R['favicon.ico'], type=wx.BITMAP_TYPE_ICO))
-        icon = wx.EmptyIcon()
+        bmp = wx.Bitmap(wx.Image(R['favicon.ico'], type=wx.BITMAP_TYPE_ICO))
+        icon = wx.Icon()
         icon.CopyFromBitmap(bmp)
         self.SetIcon(icon)
-        self.Bind(wx.EVT_CLOSE, self.OnClose)
+        # self.Bind(wx.EVT_CLOSE, self.OnClose)
         self.Bind(wx.EVT_ICONIZE, self.OnIconify)
 
         # timer for counting every second
@@ -67,7 +67,7 @@ class MainFrame(wx.Frame, OnStateChangeListener):
 
         top_sizer = wx.BoxSizer(wx.VERTICAL)
         child_sizer = wx.BoxSizer(wx.HORIZONTAL)
-        sizer_style = wx.ALIGN_CENTER_VERTICAL|wx.EXPAND|wx.ALL&~wx.BOTTOM
+        sizer_style = wx.ALIGN_CENTER_VERTICAL|wx.ALL&~wx.BOTTOM
         child_sizer.Add(self.text_box, 0,sizer_style, 12)
         child_sizer.Add(self.btn_start, 0, sizer_style, 12)
         child_sizer.Add(self.btn_stop, 0,sizer_style & ~wx.LEFT, 12)
@@ -91,7 +91,7 @@ class MainFrame(wx.Frame, OnStateChangeListener):
     def OnClose(self, evt):
         self.Hide()
         # Prevent Exit Event
-        evt.Veto()
+        # evt.Veto()
 
     def __OnStateStart(self):
         time = wx.GetApp().GetTimeLeft()
@@ -113,10 +113,10 @@ class MainFrame(wx.Frame, OnStateChangeListener):
         if state_name in ('StopState', 'IdleState'):
             self.text_box.SetForegroundColour(wx.ColourDatabase().Find("DIM GREY"))
             self.btn_stop.Enable(False)
-        elif  state_name is 'WorkState':
+        elif  state_name == 'WorkState':
             time = wx.GetApp().GetTimeLeft()
             self.btn_stop.Enable(True)
-        elif state_name is 'RestState':
+        elif state_name == 'RestState':
             self.text_box.SetForegroundColour(wx.RED)
             time = wx.GetApp().GetWorkTimeSpan()
             self.btn_stop.Enable(True)
@@ -126,11 +126,11 @@ class MainFrame(wx.Frame, OnStateChangeListener):
         self.__timer.Stop()
         state_name = self.__state.getState()
         self.btn_stop.SetLabel(u"结束")
-        if state_name is 'WorkState':
+        if state_name == 'WorkState':
             self.__OnWorkStateTimeUp()
-        elif state_name is 'RestState':
+        elif state_name == 'RestState':
             self.__OnRestStateTimeUp()
-        elif state_name is 'IdleState':
+        elif state_name == 'IdleState':
             self.__OnIdleStateTimeUp()
         self.__PopUp()
 

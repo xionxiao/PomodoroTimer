@@ -7,7 +7,7 @@ import sys, platform
 from Resource import Resource
 
 # generate R.py from resources
-print "creating R.py"
+print("creating R.py")
 res = Resource()
 res.Add('favicon.ico', 'favicon.ico')
 res.Add('HmJobsDone.wav', 'HmJobsDone.wav')
