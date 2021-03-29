@@ -1,13 +1,17 @@
 # -*- coding: utf8 -*-
 import os, base64, zlib
-import StringIO
+from io import BytesIO
 
 _R_Class_String = """
+# -*- coding: utf8 -*-
+import base64, zlib
+from io import BytesIO
+
 class _R(dict):
     def __getitem__(self, name):
-        return StringIO.StringIO(
+        return BytesIO(
             zlib.decompress(
-                base64.decodestring(
+                base64.b64decode(
                     super(_R,self).__getitem__(name)
                     )))
 
@@ -16,33 +20,34 @@ R = _R()
 
 class Resource():
     __res_list = {}
-    def Add(self, id, filename):
+    def add(self, id, filename):
         if os.path.isfile(filename):
             self.__res_list[id] = filename
 
-    def Compile(self):
-        rf = open('R.py', 'w+')
-        rf.write("# -*- coding: utf8 -*-\n")
-        rf.write('import base64, zlib, StringIO\n')
-        rf.write(_R_Class_String)
-        for r in self.__res_list:
-            f = open(self.__res_list[r], 'rb').read();
-            data = base64.encodestring(zlib.compress(f));
-            rf.write('R[' + repr(r) + '] = """' + data + '"""\n\n')
-        rf.close()
+    def compile(self):
+        with open("R.py", "w+") as f:
+            f.write(_R_Class_String)
+            for r in self.__res_list:
+                with open(self.__res_list[r], 'rb') as source:
+                    d = source.read()
+                    data = base64.b64encode(zlib.compress(d))
+                    #f.write('R[' + repr(r) + '] = """' + bytes.decode(data) + '"""\n\n')
+                    f.write('R[' + repr(r) + '] = ' + str(data) + '\n\n')
+                
 
-    def Retrive(self, id):
-        sf = zlib.decompress(base64.decodestring())
-        return StringIO.StringIO(sf)
+    def retrive(self, id):
+        sf = zlib.decompress(base64.b64decode(self.__res_list[id]))
+        return BytesIO(sf)
 
 # test case
 if __name__ == "__main__":
     r = Resource()
-    r.Add('favicon.ico', 'favicon.ico')
-    r.Add('HmJobsDone.wav', 'HmJobsDone.wav')
-    r.Add('REMINDER.WAV', 'REMINDER.WAV')
-    r.Add('HmReadyToWork.wav', 'HmReadyToWork.wav')
-    r.Compile()
+    r.add('favicon.ico', 'favicon.ico')
+    r.add('HmJobsDone.wav', 'HmJobsDone.wav')
+    r.add('REMINDER.WAV', 'REMINDER.WAV')
+    r.add('HmReadyToWork.wav', 'HmReadyToWork.wav')
+    r.add('requirements', 'requirements.txt')
+    r.compile()
     from R import *
     print(R['favicon.ico'])
     print(R['HmJobsDone.wav'].read())
