@@ -3,13 +3,14 @@ import wx
 import logging
 from State import *
 from R import *
+from wx.adv import TaskBarIcon as TB
 
-class TaskBarIcon(wx.TaskBarIcon, OnStateChangeListener):
+class TaskBarIcon(TB, OnStateChangeListener):
     def __init__(self, frame=None):
         OnStateChangeListener.__init__(self)
-        wx.TaskBarIcon.__init__(self)
+        # super(TB, self).__init__(self)
         #icon = wx.Icon('favicon.ico', wx.BITMAP_TYPE_ICO)
-        icon = wx.EmptyIcon()
+        icon = wx.Icon()
         bmp = wx.BitmapFromImage(wx.ImageFromStream(R['favicon.ico'], type=wx.BITMAP_TYPE_ICO))
         icon.CopyFromBitmap(bmp)
         self.__frame = frame

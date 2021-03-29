@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from MainFrm import *
-from TaskbarIcon import *
 import wx
+import wx.adv
 import sqlite3
 import logging
 from R import *
@@ -45,7 +45,7 @@ class TimerApp(wx.App, OnStateChangeListener):
         self.__frame.Center()
         self.__frame.Show()
         # Init taskbar icon
-        self.__tbicon = TaskBarIcon(self.__frame)
+        # self.__tbicon = TaskBarIcon(self.__frame)
         # Init timer
         self.__timer = wx.Timer()
         self.Bind(wx.EVT_TIMER, self.__OnTimer, self.__timer)
@@ -66,7 +66,7 @@ class TimerApp(wx.App, OnStateChangeListener):
     def __OnStateStart(self):
         self.__timer.Stop()
         state_name = self.__state.getState()
-        if state_name is 'RestState':
+        if state_name == 'RestState':
             self.__timer.Start(self.__rest_time.GetMilliseconds(), True)
             self.__start_time = wx.DateTime.Now()
             self.__PlaySound('REMINDER.WAV')
@@ -85,7 +85,7 @@ class TimerApp(wx.App, OnStateChangeListener):
     def __OnStateTimeUp(self):
         self.__timer.Stop()
         state_name = self.__state.getState()
-        if state_name is 'WorkState':
+        if state_name == 'WorkState':
             end_time = wx.DateTime.Now()
             self.__PlaySound('HmJobsDone.wav')
             # insert worktime to database
@@ -96,9 +96,9 @@ class TimerApp(wx.App, OnStateChangeListener):
             c.execute("insert into timer values(?,?,?,'done')", t)
             self.__conn.commit()
             c.close() 
-        elif state_name is 'RestState':
+        elif state_name == 'RestState':
             self.__PlaySound('REMINDER.WAV')
-        elif state_name is 'IdleState':
+        elif state_name == 'IdleState':
             self.__PlaySound('notimeforplay.wav')
         # For RestState, if timeup, RestState will change to IdleState
         self.__timer.Start(self.__idle_time_notify.GetMilliseconds(), True)
@@ -107,6 +107,7 @@ class TimerApp(wx.App, OnStateChangeListener):
     def OnExit(self):
         self.__timer.Stop()
         self.__conn.close()
+        return 0
         
     def __OnTimer(self, evt):
         self.__state.TimeUp()
@@ -116,15 +117,15 @@ class TimerApp(wx.App, OnStateChangeListener):
     def GetTimeLeft(self):
         timeleft = wx.TimeSpan(0)
         state_name = self.__state.getState()
-        if state_name is 'WorkState':
+        if state_name == 'WorkState':
             timeleft = self.__work_time - (wx.DateTime.Now()-self.__start_time)
-        elif state_name is 'RestState':
+        elif state_name == 'RestState':
             timeleft = self.__rest_time - (wx.DateTime.Now()-self.__start_time)
             if timeleft.IsNegative():
                 timeleft = wx.TimeSpan(0)
-        elif state_name is 'IdleState':
+        elif state_name == 'IdleState':
             timeleft = self.__work_time - (wx.DateTime.Now()-self.__start_time)
-        elif state_name is 'StopState':
+        elif state_name == 'StopState':
             timeleft = self.__work_time
         return timeleft
 
@@ -139,12 +140,16 @@ class TimerApp(wx.App, OnStateChangeListener):
 
     def __PlaySound(self, name=None):
         if not name:
-            soundFile = 'REMINDER.WAV'
+            sound_file = 'REMINDER.WAV'
         else:
-            soundFile = name
-        sound = wx.Sound()
-        sound.CreateFromData(R[soundFile].read())
-        sound.Play(wx.SOUND_ASYNC)
+            sound_file = name
+        try:
+            sound = wx.adv.Sound()
+            sound.CreateFromData(R[sound_file].read())
+            sound.Play(wx.SOUND_ASYNC)
+        except Exception:
+            pass
+        
 
 if __name__ == '__main__':
     app = TimerApp()
